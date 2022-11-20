@@ -1,0 +1,19 @@
+# Telling Travis we need superuser permissions to execute a build using Docker
+
+sudo: required
+language: generic
+
+# Docker needs to be pre-installed on the test server to run our tests
+
+services:
+  - docker
+
+# A series of commands or steps that need to be executed before our tests are ran or we deploy somewhere.  We need to build the image first before we run the test container.  We need to tag the image because we won't be able to copy the random image id that is presented.  We don't have interactive functionality with this automation.
+
+before_install:
+  - docker build -t offgridtech/testing -f Dockerfile.dev . 
+
+# The commands that need to be ran to run the actual test.  Travis will monitorthe stderr to see if we get a 0 for successful.  For anything other than a 0 exit code, it will assume the test failed.  Travis expects the test to run and quit, but the default behavior of npm run test hangs there waiting for us to kill it.  The -e CI=true  gives a little more output than expected, but kills the process after the test.  Travis only cares about the status code.
+
+script:
+  - docker run -e CI=true USERNAME/docker-react npm run test 

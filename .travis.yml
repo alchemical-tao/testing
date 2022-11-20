@@ -16,4 +16,4 @@ before_install:
 # The commands that need to be ran to run the actual test.  Travis will monitorthe stderr to see if we get a 0 for successful.  For anything other than a 0 exit code, it will assume the test failed.  Travis expects the test to run and quit, but the default behavior of npm run test hangs there waiting for us to kill it.  The -e CI=true  gives a little more output than expected, but kills the process after the test.  Travis only cares about the status code.
 
 script:
-  - docker run -e CI=true USERNAME/docker-react npm run test 
+  - docker run -e CI=true offgridtech/testing npm run test 
